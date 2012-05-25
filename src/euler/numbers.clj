@@ -113,3 +113,20 @@
      (let [next-x (inc last-x), next-total (+ total next-x)]
        (lazy-seq (cons next-total (rest-tris next-total next-x)))))
    0 0))
+
+(defn largest-sum-through-triangle [lines]
+  (let
+      [reversed-lines (reverse lines)]
+    (loop [largest-line (first reversed-lines), remaining-lines (rest reversed-lines)]
+      (cond
+       (empty? remaining-lines) (max largest-line)
+       :else
+       (let
+           [next-line (first remaining-lines)
+            rest-lines (rest remaining-lines)
+            mapped-line 
+            (map
+             #(+ % (max (first %2) (second %2)))
+             next-line
+             (partition 2 1 largest-line))]
+         (recur mapped-line rest-lines))))))
