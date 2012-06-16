@@ -110,7 +110,8 @@
 
 (defn triangular-numbers []
   ((fn rest-tris [total last-x]
-     (let [next-x (inc last-x), next-total (+ total next-x)]
+     (let [next-x (inc last-x)
+           next-total (+ total next-x)]
        (lazy-seq (cons next-total (rest-tris next-total next-x)))))
    0 0))
 
@@ -130,3 +131,23 @@
              next-line
              (partition 2 1 largest-line))]
          (recur mapped-line rest-lines))))))
+
+(defn amicable-numbers
+  "Returns a lazy sequence of amicable number pairs"
+  []
+  ((fn rest-amis [x]
+     (loop [candidate x]
+       (let [candidate-mon-ami (apply + (proper-divisors candidate))
+             candidate-ami-ami (if (> candidate-mon-ami candidate)
+                                (apply + (proper-divisors candidate-mon-ami))
+                                0)]
+         (if (= candidate-ami-ami candidate)
+           (lazy-seq (cons [candidate candidate-mon-ami] (rest-amis (inc candidate))))
+           (recur (inc candidate))))))
+   1))
+
+(defn factorial [x]
+  (loop [x x acc 1]
+    (cond
+     (< x 2) 1
+     :else (recur (dec x) (* acc x)))))
