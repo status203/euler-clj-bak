@@ -149,5 +149,17 @@
 (defn factorial [x]
   (loop [x x acc 1]
     (cond
-     (< x 2) 1
+     (< x 2) acc
      :else (recur (dec x) (* acc x)))))
+
+(defn perfect-classification
+  "Returns :perfect, :deficient, or :abundant"
+  [x] (let [pd-sum (apply + (proper-divisors x))]
+        (cond (< pd-sum x) :deficient
+              (> pd-sum x) :abundant
+              :else :perfect)))
+
+(defn perfect-classifications
+  "Returns a lazy sequence that classifies each index (starting at 1)"
+  [] ((fn rest-pc [x]
+        (lazy-seq (cons (perfect-classification x) (rest-pc (inc x))))) 1))
