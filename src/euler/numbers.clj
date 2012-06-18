@@ -49,18 +49,16 @@
                          (rest-primes [next-sieve candidates]))))))
    []))
 
-(defn prime-factors [x]
-  (loop 
-      [potential-factors (take-while (partial > (inc (int (Math/sqrt x)))) (primes))
-       acc-factors []
-       amount-left x]
-    (let [next-potential-factor (first potential-factors)]
- 			(cond
-       (empty? potential-factors) (if (< amount-left 2)
-                                    acc-factors
-                                    (conj acc-factors amount-left))
-       (= 0 (mod amount-left next-potential-factor)) (recur potential-factors (conj acc-factors next-potential-factor) (quot amount-left next-potential-factor))
-       :else (recur (rest potential-factors) acc-factors amount-left))))) 
+(defn prime-factors
+  "Returns a vector of the prime factors of x"
+  [x] (loop [ps (primes)
+            acc []
+            remainder x]
+       (let [p (first ps)]
+         (cond (= remainder 1) acc
+               (> (* p p) x) acc
+               (zero? (mod remainder p)) (recur ps (conj acc p) (quot remainder p))
+               :else (recur (rest ps) acc remainder)))))
 
 (defn number-of-factors [x]
   "Calculate the number of factors, via prime factors, without reconstructing every factor"
