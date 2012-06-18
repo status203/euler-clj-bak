@@ -1,6 +1,8 @@
 (ns euler.numbers
   (:use clojure.set))
 
+(defn square [x] (* x x))
+
 (defn sieve-compare [x y]
   (cond
    (< (first x) (first y)) -1
@@ -43,7 +45,7 @@
                                    (iterate sieve-candidate (sieve-candidate sieve+candidates))))
                   [sieve candidates] next-prime-s+c
                   next-prime (first (second next-prime-s+c))
-                  next-sieve (conj sieve [(* next-prime next-prime) next-prime])]
+                  next-sieve (conj sieve [(square next-prime) next-prime])]
               (lazy-seq (cons
                          next-prime
                          (rest-primes [next-sieve candidates]))))))
@@ -56,7 +58,7 @@
             remainder x]
        (let [p (first ps)]
          (cond (= remainder 1) acc
-               (> (* p p) x) acc
+               (> (square p) x) acc
                (zero? (mod remainder p)) (recur ps (conj acc p) (quot remainder p))
                :else (recur (rest ps) acc remainder)))))
 
@@ -64,21 +66,22 @@
   "Calculate the number of factors, via prime factors, without reconstructing every factor"
   (cond
    (= x 1) 1
-   :else (apply * (map #(inc (second %)) (frequencies (prime-factors x))))))
+   :else (apply * (map
+                   #(inc (second %))
+                   (frequencies (prime-factors x))))))
 
 (defn factors
   "Return a set of divisors of x." ; ... calculated by combining the prime factors
   [x]
-  (reduce
-   #(into % (map (partial * %2) %))
-   #{1}
-   (prime-factors x
-                  )))
+  (reduce #(into % (map (partial * %2) %)) ; Take the acc so far and
+                                        ; concat with the acc times by the
+                                        ; next prime factor
+          #{1}
+          (prime-factors x)))
 
 (defn prime?
   [x]
-	(= (count (factors x)) 2))
-
+  (= (count (factors x)) 2))
 
 (defn lowest-common-multiple
   ([] 1) ; Analagous to *?
@@ -87,12 +90,11 @@
      (->> (cons x rest)
           (map (comp frequencies prime-factors))
           (apply concat)
-          (reduce
-           #(assoc % (first %2) (max (second %2) (get % (first %2) 0)))
-           {})
-          (reduce
-           #(* % (apply * (repeat (second %2) (first %2))))
-           1))))
+          (reduce #(assoc % (first %2) (max (second %2) (get % (first %2) 0)))
+                  {}) ; Get only the highest freq for each prime factor.
+          (reduce #(* % (apply * (repeat (second %2) (first %2))))
+                  1)))) ; Raise each prime factor to the appropriate
+                        ; power and mulitply together.
 
 (defn proper-divisors [x] (disj (factors x) x))
 (defn proper-factors [x] (disj (proper-divisors x) 1))
