@@ -11,9 +11,9 @@
    (zero? (mod year 4)) 29
    :else 28))
 
-(defn first-in-next-month-weekday [{:keys [year month weekday]}]
+(defn first-in-next-month-weekday 
   "Returns map of next year (zero-based) month and (zero-based Monday) weekday"
-  (let 
+  [{:keys [year month weekday]}] (let 
       [days-in-cur-month (days-in-month year month)
        next-weekday (mod (+ weekday days-in-cur-month) 7)
        next-month (mod (inc month) 12)

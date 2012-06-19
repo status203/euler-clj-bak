@@ -147,10 +147,19 @@
    1))
 
 (defn factorial [x]
-  (loop [x x acc 1]
+  (loop [x x
+         acc (/ x x)]
     (cond
      (< x 2) acc
      :else (recur (dec x) (* acc x)))))
+
+(defn factorials
+  "Lazy sequence of factorials (1 based)"
+  [] ( (fn rest-fcts [last-n last-fct]
+         (let [next-fct (* last-fct (inc last-n))]         
+           (lazy-seq (cons next-fct
+                           (rest-fcts (inc last-n) next-fct)))))
+       0 1N))
 
 (defn perfect-classification
   "Returns :perfect, :deficient, or :abundant"
@@ -163,3 +172,11 @@
   "Returns a lazy sequence that classifies each index (starting at 1)"
   [] ((fn rest-pc [x]
         (lazy-seq (cons (perfect-classification x) (rest-pc (inc x))))) 1))
+
+(defn sum-digits [x]
+  (loop [x x, sum 0]
+    (cond
+     (zero? x) sum
+     :else (let [r (rem x 10), q (quot x 10)]
+             (recur q
+                    (+ sum r))))))
