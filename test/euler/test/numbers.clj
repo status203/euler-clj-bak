@@ -3,13 +3,23 @@
   (:use midje.sweet)
   (:use euler.numbers))
 
-;; sieve-candidate
+;; Primes
 
-(fact (sieve-candidate [(sorted-set [4 2]) '(2 3 5)]) => [(sorted-set [4 2]) '(3 5)])
-(fact (sieve-candidate [(sorted-set [4 2] [9 3]) '(3 5 7)]) => [(sorted-set [6 2] [9 3]) '(5 7)])
-(fact (sieve-candidate [(sorted-set [6 2] [9 3] [25 5]) '(5 7 9)]) => [(sorted-set [8 2] [9 3] [25 5]) '(7 9)])
-(fact (sieve-candidate [(sorted-set [8 2] [9 3] [25 5] [49 7]) '(7 9 11)]) => [(sorted-set [10 2] [9 3] [25 5] [49 7]) '(9 11)])
-(fact (sieve-candidate [(sorted-set [10 2] [9 3] [25 5] [49 7]) '(9 11 13)]) => [(sorted-set [12 2] [12 3] [25 5] [49 7]) '(11 13)])
+;; update-sieve-ct
+(fact (update-sieve-ct [4 2] 3) => [4 2])
+(fact (update-sieve-ct [4 2] 5) => [6 2])
+(fact (update-sieve-ct [8 2] 3) => [8 2])
+(fact (update-sieve-ct [15 3] 16) => [18 3])
+
+;; add-to-sieve-if-prime
+(fact (add-to-sieve-if-prime [[6 2] [9 3]] 5) => [[6 2] [9 3] [25 5]])
+(fact (add-to-sieve-if-prime [[4 2] [9 3]] 4) => [[4 2] [9 3]])
+
+;; sieve-step
+(fact (sieve-step [(sorted-set [4 2] [9 3]) [3 5 7 9]]) => [(sorted-set [6 2] [9 3] [25 5]) [5 7 9]])
+(fact (sieve-step [(sorted-set [4 2] [9 3] [25 5]) [5 7 9 11]]) => [(sorted-set [8 2] [9 3] [25 5] [49 7]) [7 9 11]])
+(fact (sieve-step [(sorted-set [4 2] [9 3] [25 5] [49 7]) [7 9 11 13]]) => [(sorted-set [9 3] [10 2] [25 5] [49 7]) [9 11 13]])
+
 
 ;; primes
 
@@ -64,19 +74,14 @@
 (fact (prime? 9) => false)
 (fact (prime? 53) => true)
 
-;; common-prime-factors
-(fact (sort (common-prime-factors 2 4)) => [2])
-(fact (sort (common-prime-factors 4 2)) => [2])
-(fact (sort (common-prime-factors 6 12)) => [2 3])
-(fact (sort (common-prime-factors 12 18)) => [2 3])
-(fact (sort (common-prime-factors 12 12)) => [2 2 3])
-
 ;; smallest-common-multiple
-(fact (smallest-common-multiple 1 2) => 2)
-(fact (smallest-common-multiple 6 10) => 30)
+(fact (lowest-common-multiple 1 2) => 2)
+(fact (lowest-common-multiple 6 10) => 30)
+(fact (lowest-common-multiple 3 9) => 9)
+(fact (lowest-common-multiple 7 13) => 91)
 
-;; proper-divisors
-(fact (sort (proper-divisors 6)) => [1 2 3])
+;; Fibonacci
+(fact (take 10 (fib)) => [1 1 2 3 5 8 13 21 34 55])
 
-;; proper-factors
-(fact (sort (proper-factors 6)) => [2 3])
+;; Triangular numbers
+(fact (take 10 (triangular-numbers)) => [1 3 6 10 15 21 28 36 45 55])
