@@ -85,3 +85,39 @@
 
 ;; Triangular numbers
 (fact (take 10 (triangular-numbers)) => [1 3 6 10 15 21 28 36 45 55])
+
+;; Largest sum through triangle
+(fact (largest-sum-through-triangle [[1] [1 1]]) => 2)
+(fact (largest-sum-through-triangle [[2] [1 1]]) => 3)
+(fact (largest-sum-through-triangle [[1] [2 3]]) => 4)
+(fact (largest-sum-through-triangle [[1] [2 3] [4 5 6]]) => 10)
+(fact (largest-sum-through-triangle [[1] [3 2] [6 5 4]]) => 10)
+(fact (largest-sum-through-triangle [[6] [5 4] [3 2 1]]) => 14)
+
+;; Amicable numbers
+(fact (take 3 (amicable-numbers)) => [[220 284] [2620 2924] [5020 5564]])
+
+;; factorials
+(fact (factorial 0) => 1)
+(fact (factorial 1) => 1)
+(fact (factorial 2) => 2)
+(fact (factorial 3) => 6)
+
+(fact (take 6 (factorials)) => [1 2 6 24 120 720])
+
+;; perfect numbers
+(fact (perfect-classification 1) => :deficient)
+(fact (perfect-classification 2) => :deficient)
+(fact (perfect-classification 3) => :deficient)
+(fact (perfect-classification 4) => :deficient)
+(fact (perfect-classification 5) => :deficient)
+(fact (perfect-classification 6) => :perfect)
+(fact (perfect-classification 12) => :abundant)
+
+(fact (take 12 (perfect-classifications)) => [:deficient :deficient :deficient :deficient :deficient :perfect :deficient :deficient :deficient :deficient :deficient :abundant])
+
+;; sum digits
+(fact (sum-digits 1) => 1)
+(fact (sum-digits 11) => 2)
+(fact (sum-digits 19) => 10)
+(fact (sum-digits 999999) => 54)

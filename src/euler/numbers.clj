@@ -110,7 +110,7 @@
       [reversed-lines (reverse lines)]
     (loop [largest-line (first reversed-lines), remaining-lines (rest reversed-lines)]
       (cond
-       (empty? remaining-lines) (max largest-line)
+       (empty? remaining-lines) (first (max largest-line))
        :else
        (let
            [next-line (first remaining-lines)
