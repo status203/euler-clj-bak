@@ -95,7 +95,7 @@
 (fact (largest-sum-through-triangle [[6] [5 4] [3 2 1]]) => 14)
 
 ;; Amicable numbers
-(fact (take 3 (amicable-numbers)) => [[220 284] [2620 2924] [5020 5564]])
+(fact (take 4 (amicable-numbers)) => [[220 284] [1184 1210] [2620 2924] [5020 5564]])
 
 ;; factorials
 (fact (factorial 0) => 1)

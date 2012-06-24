@@ -1,6 +1,11 @@
 (ns euler.numbers
   (:use clojure.set))
 
+(defmacro n-only-seq
+  "Create a lazy infinite sequence that calls f for each term"
+  [f] `((fn rest-seq# [n#]
+          (lazy-seq (cons (~f n#) (rest-seq# (inc n#))))) 1))
+
 (defn square [x] (*' x x))
 
 (defn update-sieve-ct
@@ -159,6 +164,10 @@
               :else :perfect)))
 
 (defn perfect-classifications
+  "Returns a lazy sequence that classifies each index (starting at 1)"
+  [] (n-only-seq perfect-classification))
+
+(defn perfect-classifications-orig
   "Returns a lazy sequence that classifies each index (starting at 1)"
   [] ((fn rest-pc [x]
         (lazy-seq (cons (perfect-classification x) (rest-pc (inc x))))) 1))
