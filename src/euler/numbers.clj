@@ -167,11 +167,6 @@
   "Returns a lazy sequence that classifies each index (starting at 1)"
   [] (n-only-seq perfect-classification))
 
-(defn perfect-classifications-orig
-  "Returns a lazy sequence that classifies each index (starting at 1)"
-  [] ((fn rest-pc [x]
-        (lazy-seq (cons (perfect-classification x) (rest-pc (inc x))))) 1))
-
 (defn sum-digits [x]
   (loop [x x, sum 0]
     (cond
