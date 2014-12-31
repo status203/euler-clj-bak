@@ -17,37 +17,35 @@
              (filter #(divides? n %))
              empty?)))
 
-(defn primes-niaive
- "Generates an infinite sequence of prime numbers by checking each number for primeness"
+(defn primes-naive
+ "Generates an infinite sequence of prime numbers by checking each number for
+  primeness"
  [] (filter prime? (range)))
 
 (defn prime-next
-  "Produce the next prime greater than n, given a sequence of the lower primes
-  at least up to the square root of n. Assumes that "
+  "Produce the next prime given a sequence of the lower primes
+  at least up to the square root of n."
   [n primes]
-    (loop [candidates (iterate inc (inc n))]
+  (case primes
+    [] 2
+    [2] 3
+    (loop [candidates (iterate (partial + 2) (+ n 2))]
       (let [upper-bound (Math/floor (Math/sqrt n))
             relevant-primes (take-while (partial >= upper-bound) primes)]
         (let [candidate (first candidates)]
           (if (not-any? (partial divides? candidate) primes)
             candidate
-            (recur (rest candidates)))))))
+            (recur (rest candidates))))))))
 
-
-#_(defn primes
+(defn primes
   "Returns a lazy infinite sequence of primes"
-  [] (letfn
-       [(prime? [n primes-so-far] ; Faster check for primeness as we should have all lower primes in this case.
-                (let [upper-bound (inc (Math/floor(Math/sqrt n)))]
-                  (->> primes-so-far
-                       map #(divides? n %))))
-        (next-prime [primes-so-far next-num]
-                    (->> (iterate inc next-num)
-             ))]))
+  [] (concat [2 3 5] ((fn r-primes [n prior-primes]
+   (let [next-prime (prime-next n prior-primes)
+         next-primes (concat prior-primes [next-prime])]
+     (lazy-seq (cons next-prime (r-primes next-prime next-primes))))) 5 [2 3 5])))
 
 
-;; Sequences of prime factors
-#_(defn prime-factors
+(defn prime-factors
   "Generates a sequence of prime factors of n"
   [n] (loop [m n
              factors []
@@ -58,4 +56,3 @@
            (if (divides? m possible-factor)
              (recur (quot m possible-factor) (conj factors possible-factor) possible-factors)
              (recur m factors (rest possible-factors)))))))
-

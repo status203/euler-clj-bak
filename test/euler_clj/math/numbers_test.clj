@@ -1,5 +1,5 @@
 (ns euler-clj.math.numbers-test
-  (:require [midje.sweet :refer :all]
+  (:require [midje.sweet :refer [tabular fact facts]]
             [euler-clj.math.numbers :refer :all]))
 
 (tabular
@@ -32,8 +32,8 @@
  97  true
  125 false)
 
-(fact "about first twenty primes"
- (take 20 (primes-niaive)) => [ 2  3  5  7 11
+(fact "about first twenty primes (naively)"
+ (take 20 (primes-naive)) => [ 2  3  5  7 11
                                13 17 19 23 29
                                31 37 41 43 47
                                53 59 61 67 71])
@@ -44,3 +44,20 @@
 
  ?primes ?n ?result
  []      1  2)
+
+(fact "about first twenty primes"
+ (take 20 (primes)) => [ 2  3  5  7 11
+                        13 17 19 23 29
+                        31 37 41 43 47
+                        53 59 61 67 71])
+
+(tabular
+ (facts "about prime facts"
+        (prime-factors ?n) => ?result)
+
+ ?n    ?result
+  2    [2]
+  4    [2 2]
+  5    [5]
+  6    [2 3]
+ 12    [2 2 3])
