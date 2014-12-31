@@ -33,14 +33,14 @@
  125 false)
 
 (fact "about first twenty primes"
- (take 20 (primes)) => [2 3 5 7 11
-                        13 17 19 23 29
-                        31 37 41 43 47
-                        53 59 61 67 71])
+ (take 20 (primes-niaive)) => [ 2  3  5  7 11
+                               13 17 19 23 29
+                               31 37 41 43 47
+                               53 59 61 67 71])
 
+(tabular
+  (facts "about finding the next prime"
+         (prime-next ?n ?primes) => ?result)
 
-(prime-factors 6000000012)
-
-(quot 3000000007 2)
-
-(take 5 (iterate inc 1))
+ ?primes ?n ?result
+ []      1  2)

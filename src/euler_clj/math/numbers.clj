@@ -2,15 +2,13 @@
 
 (defn divides?
   "Whether integer n divides integer m without remainder"
-  [m n] (= 0 (mod m n)))
+  [m n] (zero? (mod m n)))
 
 (defn fib
   "Creates an infinite sequence of Fibonacci numbers starting with m and n"
   [m n] (cons m
               (lazy-seq (fib n (+' m n)))))
 
-
-;; Prime predicates
 (defn prime?
   "Checks whether n is prime"
   [n] (if (< n 2)
@@ -19,13 +17,24 @@
              (filter #(divides? n %))
              empty?)))
 
-;; Sequences of primes
-(defn- primes-naive
+(defn primes-niaive
  "Generates an infinite sequence of prime numbers by checking each number for primeness"
- [] (filter prime-naive? (range)))
+ [] (filter prime? (range)))
+
+(defn prime-next
+  "Produce the next prime greater than n, given a sequence of the lower primes
+  at least up to the square root of n. Assumes that "
+  [n primes]
+    (loop [candidates (iterate inc (inc n))]
+      (let [upper-bound (Math/floor (Math/sqrt n))
+            relevant-primes (take-while (partial >= upper-bound) primes)]
+        (let [candidate (first candidates)]
+          (if (not-any? (partial divides? candidate) primes)
+            candidate
+            (recur (rest candidates)))))))
 
 
-(defn primes
+#_(defn primes
   "Returns a lazy infinite sequence of primes"
   [] (letfn
        [(prime? [n primes-so-far] ; Faster check for primeness as we should have all lower primes in this case.
@@ -38,7 +47,7 @@
 
 
 ;; Sequences of prime factors
-(defn prime-factors
+#_(defn prime-factors
   "Generates a sequence of prime factors of n"
   [n] (loop [m n
              factors []
