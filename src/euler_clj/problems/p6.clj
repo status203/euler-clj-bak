@@ -1,4 +1,4 @@
-(ns euler-clj.problem.p6
+(ns euler-clj.problems.p6
   (:require [euler-clj.math.numbers :refer [square]]))
 
 (-
