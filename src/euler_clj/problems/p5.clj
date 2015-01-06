@@ -1,9 +1,4 @@
 (ns euler-clj.problems.p5
-  (:require [euler-clj.math.numbers :refer [prime-factors freq-merge freq-expand]]))
+  (:require [euler-clj.math.numbers :refer [least-common-multiple]]))
 
-(->> (range 2 21)
-     (map prime-factors)
-     (map frequencies)
-     (reduce freq-merge)
-     freq-expand
-     (reduce *))
+(apply least-common-multiple (range 2 21))

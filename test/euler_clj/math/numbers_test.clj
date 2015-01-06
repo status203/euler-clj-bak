@@ -3,6 +3,17 @@
             [euler-clj.math.numbers :refer :all]))
 
 (tabular
+ (facts "about squares"
+        (square ?n) => ?result)
+
+ ?n  ?result
+ 0   0
+ 1   1
+ 2   4
+ 10  100
+ 5/2 25/4)
+
+(tabular
  (facts "about exact integer division"
         (divides? ?m ?n) => ?result)
 
@@ -13,11 +24,15 @@
  100 20   true
  123 20   false)
 
-(fact "first 20 Fibonacci numbers"
-      (take 20 (fib 0 1)) => [0 1 1 2 3
-                              5 8 13 21 34
-                              55 89 144 233 377
-                              610 987 1597 2584 4181])
+(tabular
+ (facts "first 20 Fibonacci numbers"
+      (take 8 (fib ?m ?n)) => ?result)
+
+ ?m ?n ?result
+ 0  1  [0 1 1 2 3 5 8 13]
+ 1  1  [1 1 2 3 5 8 13 21])
+
+(+  3 5)
 
 (tabular
  (facts "about primeness"

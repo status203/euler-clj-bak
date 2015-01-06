@@ -1,13 +1,18 @@
 (ns euler-clj.math.numbers)
 
+(defn square
+  "Returns n multiplied by itself"
+  [n] (* n n))
+
 (defn divides?
   "Whether integer n divides integer m without remainder"
   [m n] (zero? (mod m n)))
 
 (defn fib
   "Creates an infinite sequence of Fibonacci numbers starting with m and n"
-  [m n] (cons m
-              (lazy-seq (fib n (+' m n)))))
+  ([] (fib 0 1))
+  ([m n] (lazy-seq (cons m
+                        (fib n (+' m n))))))
 
 (defn prime?
   "Checks whether n is prime"
@@ -80,3 +85,16 @@
   [m] (reduce (fn [acc [k v]] (concat (repeat v k) acc))
               []
               m))
+
+(defn least-common-multiple
+  "Calculates the least common multiple of the supplied numbers. In analogy to *
+  the lcm of no numbers returns 1"
+  ([] 1 )
+  ([n] n)
+  ([n & rest] (->> (cons n rest)
+                   (map prime-factors)
+                   (map frequencies)
+                   (reduce freq-merge)
+                   (freq-expand)
+                   (reduce *))))
+
