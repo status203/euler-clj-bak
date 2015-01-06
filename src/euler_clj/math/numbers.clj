@@ -18,8 +18,8 @@
              empty?)))
 
 (defn primes-naive
- "Generates an infinite sequence of prime numbers by checking each number for
-  primeness"
+ "Generates an infinite sequence of prime numbers by checking each number
+  for primeness"
  [] (filter prime? (range)))
 
 (defn prime-next
@@ -54,5 +54,29 @@
           factors
           (let [possible-factor (first possible-factors)]
            (if (divides? m possible-factor)
-             (recur (quot m possible-factor) (conj factors possible-factor) possible-factors)
+             (recur (quot m possible-factor)
+                    (conj factors possible-factor)
+                    possible-factors)
              (recur m factors (rest possible-factors)))))))
+
+(defn freq-upsert
+  "If new value does not exist in freq map (as key) then insert with given
+  frequency, otherwise set frequency to largest of existing or given"
+  [m value freq] (update-in m
+                            [value]
+                            (fn [old new] ((fnil max 0) old new))
+                            freq))
+
+(defn freq-merge
+  "Merge two frequency maps. If there are duplicates in either sequence the result
+  should contain the larger frequency of the duplicate item"
+  [a b] (if-let [[k v] (first a)]
+          (freq-merge (dissoc a k) (freq-upsert b k v))
+          b))
+
+(defn freq-expand
+  "Expand map of values (map key) and frequencies (map value) into sequence
+  of values"
+  [m] (reduce (fn [acc [k v]] (concat (repeat v k) acc))
+              []
+              m))

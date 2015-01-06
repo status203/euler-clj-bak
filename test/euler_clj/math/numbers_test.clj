@@ -1,5 +1,5 @@
 (ns euler-clj.math.numbers-test
-  (:require [midje.sweet :refer [tabular fact facts]]
+  (:require [midje.sweet :refer [tabular fact facts just]]
             [euler-clj.math.numbers :refer :all]))
 
 (tabular
@@ -61,3 +61,18 @@
   5    [5]
   6    [2 3]
  12    [2 2 3])
+
+(tabular
+ (facts "about frequency upserts"
+        (freq-upsert ?m ?k ?v) => ?result)
+
+ ?m         ?k   ?v  ?result
+ {1 2 3 4}  3    1   {1 2 3 4}
+ {1 2 3 4}  3    5   {1 2 3 5}
+ {1 2 3 4}  5    6   {1 2 3 4 5 6})
+
+(fact "about frequency merges"
+      (freq-merge {1 1 2 2 3 3 4 4} {1 1 2 1 3 4 5 5}) => {1 1 2 2 3 4 4 4 5 5})
+
+(fact "about frequency expansion"
+      (freq-expand {:a 3 :b 2 :c 1}) => (just [:a :a :a :b :b :c] :in-any-order))
