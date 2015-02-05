@@ -80,7 +80,7 @@
 
 (defn primes-by-iterative-sieve
   "Lazy sequence of primes using an iterative sieve"
-  [] (cons 2 (map #(last (first %)) (prime-sieves))))
+  [] (cons 2 (map #(peek (first %)) (prime-sieves))))
 
 (def primes primes-by-prior-primes)
 
