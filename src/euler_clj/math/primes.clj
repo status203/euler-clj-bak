@@ -39,20 +39,15 @@
 ;; sieve passed around as
 ;; [vec-of-primes-so-far lazy-seq-of-candidates priority-map-of-multiples]
 
-(defn sieve-update-lowest-multiple
-  "Adds the relevant amount to the first counter"
-  [[_ _  multiples :as sieve]]
-  (let [[prime multiple] (peek multiples)]
-    (assoc-in sieve [2 prime] (+ multiple prime))))
-
 (defn sieve-counters-for-next-candidate
   "Repeatedly update lowest multiple until lowest multiple is >= candidate
   (does not update primes or candidates)"
-  [[_ [candidate :as candidates]  _ :as sieve]]
-  (let [[_ _ new-multiples :as new-sieve] (sieve-update-lowest-multiple sieve)]
-    (if (< (second (peek new-multiples)) candidate)
-      (recur new-sieve)
-      new-sieve)))
+  [[_ [candidate :as candidates] multiples :as sieve]]
+  (loop [[_ _ multiples :as sieve] sieve]
+    (let [[prime multiple] (peek multiples)]
+          (if (>= multiple candidate)
+            sieve
+            (recur (assoc-in sieve [2 prime] (+ multiple prime)))))))
 
 (defn sieve-next-candidate-update
   "Updates all components of the sieve for the next candidate"
