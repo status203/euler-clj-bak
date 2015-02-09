@@ -62,22 +62,17 @@
                  (update-in [2] #(assoc % candidate candidate)))
              sieve)))))
 
-(defn prime-sieves
-  "Returns a lazy sequence of sieves, each of which 'finds' a new prime"
-  ([] (let [initial-sieve [[2] (iterate #(+ 2 %) 3) (priority-map 2 2)]]
-        (prime-sieves 2 initial-sieve)))
-  ([prev-prime prev-sieve]
-   (let [next-sieve (sieve-next-candidate-update prev-sieve)
-         next-sieve-last-prime (peek (first next-sieve))]
-     (if (= next-sieve-last-prime prev-prime)
-       (prime-sieves prev-prime next-sieve)
-       (lazy-seq (cons next-sieve (prime-sieves next-sieve-last-prime next-sieve)))))))
-
 (defn primes-by-iterative-sieve
   "Lazy sequence of primes using an iterative sieve"
-  [] (cons 2 (map #(peek (first %)) (prime-sieves))))
+  []
+  (let [initial-sieve [[2] (iterate #(+ 2 %) 3) (priority-map 2 2)]]
+    (->> (iterate sieve-next-candidate-update initial-sieve)
+         (map #(peek (first %)))
+         (partition 2 1)
+         (remove #(= (first %) (first (rest %))))
+         (map first))))
 
-(def primes primes-by-prior-primes)
+(def primes primes-by-iterative-sieve)
 
 (defn prime-factors
   "Generates a sequence of prime factors of n"
