@@ -76,7 +76,7 @@
 
 (defn prime-factors
   "Generates a sequence of prime factors of n, can optionally provide a list of primes."
-  ([n] (prime-factors n (primes)))
+  ([n] (prime-factors (primes) n))
   ([possible-factors n]
     (loop [m n
            factors []
