@@ -75,10 +75,12 @@
 (def primes primes-by-iterative-sieve)
 
 (defn prime-factors
-  "Generates a sequence of prime factors of n"
-  [n] (loop [m n
-             factors []
-             possible-factors (primes)]
+  "Generates a sequence of prime factors of n, can optionally provide a list of primes."
+  ([n] (prime-factors n (primes)))
+  ([possible-factors n]
+    (loop [m n
+           factors []
+           possible-factors possible-factors]
         (if (<= m 1)
           factors
           (let [possible-factor (first possible-factors)]
@@ -86,5 +88,4 @@
              (recur (quot m possible-factor)
                     (conj factors possible-factor)
                     possible-factors)
-             (recur m factors (rest possible-factors)))))))
-
+             (recur m factors (rest possible-factors))))))))

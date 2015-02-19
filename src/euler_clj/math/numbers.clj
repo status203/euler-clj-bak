@@ -1,5 +1,5 @@
 (ns euler-clj.math.numbers
-  (:require [euler-clj.math.primes :refer [prime-factors]]))
+  (:require [euler-clj.math.primes :refer [prime-factors primes]]))
 
 (defn square
   "Returns n multiplied by itself"
@@ -49,3 +49,20 @@
                    (freq-expand)
                    (reduce *))))
 
+(defn number-of-factors
+  "Calculates the number of factors of n" ; directly from the prime factors
+  ([n] (number-of-factors (primes) n ))
+  ([possible-primes n]
+   (->> n
+        (prime-factors possible-primes)
+        frequencies
+        (map (comp inc second))
+        (reduce *))))
+
+(defn triangular-numbers
+  "Return a lazy infinite sequence of triangular numbers"
+  ([] (triangular-numbers 0 0))
+  ([last-tri last-delta]
+   (let [new-delta (inc last-delta)
+         new-tri (+ last-tri new-delta)]
+     (lazy-seq (cons new-tri (triangular-numbers new-tri new-delta))))))

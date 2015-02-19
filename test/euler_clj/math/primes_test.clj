@@ -53,14 +53,6 @@
  12    [2 2 3])
 
 (tabular
- (facts "about updating the lowest multiple in an iterative sieve"
-        (sieve-update-lowest-multiple ?sieve) => ?result)
-
- ?sieve                                   ?result
- [[2] [3 5 7] (priority-map 2 2)]         [[2] [3 5 7] {2 4}]
- [[2 3] [5 7 9] (priority-map 2 4 3 3)]   [[2 3] [5 7 9] {2 4, 3 6}])
-
-(tabular
  (facts "about updating sieve multiples for the next candidate"
         (sieve-counters-for-next-candidate ?sieve) => ?result)
 
