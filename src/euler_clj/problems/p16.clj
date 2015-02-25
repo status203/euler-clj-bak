@@ -1,6 +1,6 @@
-(ns euler-clj.problems.p16)
+(ns euler-clj.problems.p16
+  (:require [euler-clj.math.numbers-as-text :refer [digits]]))
 
 (->> (reduce *' (repeat 1000 2))
-     str
-     (map #(Integer/parseInt (str %)))
+     digits
      (reduce +))
