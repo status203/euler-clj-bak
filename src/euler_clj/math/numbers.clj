@@ -66,3 +66,7 @@
    (let [new-delta (inc last-delta)
          new-tri (+ last-tri new-delta)]
      (lazy-seq (cons new-tri (triangular-numbers new-tri new-delta))))))
+
+(defn factorial [n]
+  (loop [n n acc 1] (if (< n 2) acc (recur (dec n) (*' acc n)))))
+
